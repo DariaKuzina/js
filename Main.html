@@ -1,19 +1,57 @@
-<!DOCTYPE html>
+<html>
 <head>
     <title>iRock - Виртуальный любимец</title>
+    <script type="text/javascript" src="cookie.js"></script>
     <script type="text/javascript">
+    var userName;
+    const COOKIE_NAME = "irock_username";
+
     function touchRock(){
-        var userName = prompt("What is your name?", "Enter your name");
-        if(userName){
-            alert("Nice to meet you, " + userName+".");
-            document.getElementById("rockImg").src = "rock_happy.png"
+
+        getName();
+        if(!userName)
+            return;
+
+         alert("Thanks for attention, " + userName+".");
+         document.getElementById("rockImg").src = "rock_happy.png"
+         setTimeout(bored, 5000)
+    }
+    function getName()
+    {
+        if(!userName)
+        {
+            userName = prompt("What is your name?", "Enter your name");
+            if(userName)
+            {   
+                 if(navigator.cookieEnabled)
+                    writeCookie(COOKIE_NAME, userName, 1);
+                 else
+                    alert("Cookie disabled, so I will not remember you, " + userName+".");
+                 alert("Nice to meet you, " + userName+".");
+            }
         }
+    }
+    function bored() {
+        document.getElementById("rockImg").src = "rock.png";
+    }
+
+     function resizeRock() {
+        document.getElementById("rockImg").style.height = (document.body.clientHeight - 100) * 0.9;
+      }
+    function greetUser() {
+        
+        if(navigator.cookieEnabled)
+            userName = readCookie(COOKIE_NAME); 
+        if(userName)
+            alert('Hello, ' + userName + '! Nice to see you again.');
+        else 
+            alert('Hello, I am your pet rock.');
     }
     </script>
 </head>
-<body id="body" onload="alert('Hello, I am your pet rock.');">
+<body id="body" onload="resizeRock(); greetUser();" onresize="resizeRock();">
 <div style="margin-top:100px; text-align:center">
-    <img id="rockImg" src="rock.png" alt="iRock" style="cursor:pointer" onclick="touchRock()"/>
+    <img id="rockImg" src="rock.png" alt="iRock" style="cursor:pointer" onclick="touchRock();"/>
 </div>
 </body>
 </html>
